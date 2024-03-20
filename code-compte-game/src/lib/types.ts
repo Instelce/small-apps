@@ -11,3 +11,7 @@ export type ClasseType = {
     comptes: CompteType[];
 }
 
+export type LastGameType = {
+    score: number;
+    errors: number;
+}

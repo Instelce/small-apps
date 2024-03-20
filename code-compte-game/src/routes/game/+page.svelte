@@ -15,6 +15,7 @@
 	export let data: PageData;
 
 	let score = writable(0);
+	let errors = writable(0);
 	let maxProgress = 10;
 	let progress = writable(0);
 
@@ -31,6 +32,10 @@
     $: {
         if ($progress >= maxProgress) {
             goto('/game/results')
+			localStorage.setItem("lastGame", JSON.stringify({
+				score: $score,
+				errors: $errors
+			}))
         }
     }
 
@@ -72,7 +77,7 @@
 <div class="flex h-screen w-screen flex-col items-center justify-center gap-6">
 	<!-- question -->
 	<div class="text-center">
-		<span class="text-slate-500">Retrouve le <strong>code</strong> de ce compte</span>
+		<span class="text-gray-500">Retrouve le <strong>code</strong> de ce compte</span>
 		<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">{$quizData.question}</h3>
 	</div>
 
@@ -86,6 +91,8 @@
 				onClick={() => {
 					if (num === $quizData.questionAnswer) {
 						score.update((s) => s + 100);
+					} else {
+						errors.update(e => e + 1)
 					}
 					isAnswered.set(true);
 				}}

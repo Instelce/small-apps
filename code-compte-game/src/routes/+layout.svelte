@@ -5,7 +5,17 @@
 	import Moon from 'lucide-svelte/icons/moon';
 
 	import { toggleMode } from 'mode-watcher';
+	import { page } from '$app/stores';
 </script>
+
+<div class="absolute w-full flex justify-center p-5 gap-2">
+	<Button variant="ghost" href="/" class={$page.route.id == '/' ? 'bg-secondary' : ''}>
+		Acceuil
+	</Button>
+	<Button variant="ghost">
+		Tous
+	</Button>
+</div>
 
 <slot />
 
