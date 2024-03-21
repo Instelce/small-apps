@@ -30,7 +30,7 @@
 
 <slot />
 
-<footer class="flex w-screen flex-col items-center justify-center gap-6 py-12 pb-4 pt-12">
+<footer class="flex w-screen flex-col items-center justify-center gap-6 pb-4 pt-8 bg-slate-50 dark:bg-slate-900">
 	<div class="flex gap-4">
 		<Tooltip.Root>
 			<Tooltip.Trigger asChild let:builder>

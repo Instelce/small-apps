@@ -10,11 +10,16 @@
 	import { Progress } from '$lib/components/ui/progress';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Table from '$lib/components/ui/table';
-	import type { ClasseType } from '$lib/types';
+	import type { ClasseType, CompteType } from '$lib/types';
+	import { browser } from '$app/environment';
 
 	export let data: PageData;
 
-	let difficulty = JSON.parse(localStorage.getItem("difficulty") as string).value;
+	let difficulty = 1;
+
+	if (browser) {
+		difficulty = JSON.parse(localStorage.getItem('difficulty') as string).value;
+	}
 
 	let score = writable(0);
 	let errors = writable(0);
@@ -32,35 +37,40 @@
 		propositions: ['1', '2', '3', '4']
 	});
 
+	// redirect to results page
+	$: {
+		if ($progress >= maxProgress) {
+			goto('/game/results');
+			localStorage.setItem(
+				'lastGame',
+				JSON.stringify({
+					score: $score,
+					errors: $errors
+				})
+			);
+		}
+	}
 
-    // redirect to results page
-    $: {
-        if ($progress >= maxProgress) {
-            goto('/game/results')
-			localStorage.setItem("lastGame", JSON.stringify({
-				score: $score,
-				errors: $errors
-			}))
-        }
-    }
-
-    // generate next question
+	// generate next question
 	function next() {
 		let randomClass = arrayChoice(data.classes);
 		let randomCompte = arrayChoice(randomClass.comptes);
 
-		let exclude = [...$quizData.propositions];
-		exclude.push(randomCompte.num.toString());
-        exclude.push($quizData.questionAnswer)
+		let searchField: keyof CompteType = data.gameType == 'codes' ? 'num' : 'nom';
+		let questionField: keyof CompteType = data.gameType == 'codes' ? 'nom' : 'num';
 
-        console.log("Exclude :", exclude);
+		let exclude = [...$quizData.propositions];
+		exclude.push(randomCompte[searchField].toString());
+		exclude.push($quizData.questionAnswer);
+
+		console.log('Exclude :', exclude);
 
 		let comptes = data.classes
 			.map((classe) => classe.comptes)
 			.flat(1)
-			.map((c) => c.num.toString());
+			.map((c) => c[searchField].toString());
 		let comptesPropositions = arrayMultipleChoice(comptes, propositionsNumber - 1, exclude);
-		comptesPropositions.push(randomCompte.num.toString());
+		comptesPropositions.push(randomCompte[searchField].toString());
 
 		let propositions = arrayShuffle(comptesPropositions);
 
@@ -68,8 +78,8 @@
 
 		quizData.set({
 			compteClass: randomClass,
-			question: randomCompte.nom,
-			questionAnswer: randomCompte.num.toString(),
+			question: randomCompte[questionField].toString(),
+			questionAnswer: randomCompte[searchField].toString(),
 			propositions: propositions
 		});
 	}
@@ -82,12 +92,17 @@
 <div class="flex h-screen w-screen flex-col items-center justify-center gap-6">
 	<!-- question -->
 	<div class="text-center">
-		<span class="text-gray-500">Retrouve le <strong>code</strong> de ce compte</span>
-		<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">{$quizData.question}</h3>
+		<span class="text-gray-500"
+			>Retrouve le <strong>{data.gameType === 'codes' ? 'code' : 'nom'}</strong> de ce compte</span
+		>
+		<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">
+			{data.gameType === 'codes' ? 'N°' : ''}
+			{$quizData.question}
+		</h3>
 	</div>
 
 	<!-- propositions -->
-	<div class="grid grid-cols-2 gap-2">
+	<div class="{data.gameType == 'codes' ? 'grid grid-cols-2' : 'flex flex-col'} gap-2">
 		{#each $quizData.propositions as num (num)}
 			<AnswerButton
 				answer={num.toString()}
@@ -97,7 +112,7 @@
 					if (num === $quizData.questionAnswer) {
 						score.update((s) => s + 100);
 					} else {
-						errors.update(e => e + 1)
+						errors.update((e) => e + 1);
 					}
 					isAnswered.set(true);
 				}}
@@ -124,7 +139,8 @@
 					</Dialog.Trigger>
 					<Dialog.Content>
 						<Dialog.Header>
-							<Dialog.Title>Fait partie des {$quizData.compteClass.name.toLowerCase()}</Dialog.Title>
+							<Dialog.Title>Fait partie des {$quizData.compteClass.name.toLowerCase()}</Dialog.Title
+							>
 							<Dialog.Description>
 								{$quizData.compteClass.description}
 							</Dialog.Description>
@@ -145,7 +161,7 @@
 									</Table.Row>
 								{/each}
 							</Table.Body>
-                            <Table.Caption>Compte associé à la classe</Table.Caption>
+							<Table.Caption>Compte associé à la classe</Table.Caption>
 						</Table.Root>
 					</Dialog.Content>
 				</Dialog.Root>
@@ -154,7 +170,7 @@
 	</div>
 
 	<!-- progress bar -->
-	<div class="absolute bottom-10 flex w-[40%] flex-col items-center gap-2">
+	<div class="absolute bottom-10 flex flex-col items-center gap-2 sm:w-[80%] lg:w-[40%]">
 		<p class="text-lg font-medium">{$score}</p>
 		<Progress value={$progress} max={maxProgress} class="h-3 w-[100%]" />
 	</div>
