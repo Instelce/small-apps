@@ -14,10 +14,14 @@
 
 	export let data: PageData;
 
+	let difficulty = JSON.parse(localStorage.getItem("difficulty") as string).value;
+
 	let score = writable(0);
 	let errors = writable(0);
-	let maxProgress = 10;
+	let maxProgress = 5 + difficulty * 5;
 	let progress = writable(0);
+
+	let propositionsNumber = 2 * difficulty;
 
 	let isAnswered = writable(false);
 
@@ -27,6 +31,7 @@
 		questionAnswer: '',
 		propositions: ['1', '2', '3', '4']
 	});
+
 
     // redirect to results page
     $: {
@@ -54,7 +59,7 @@
 			.map((classe) => classe.comptes)
 			.flat(1)
 			.map((c) => c.num.toString());
-		let comptesPropositions = arrayMultipleChoice(comptes, 3, exclude);
+		let comptesPropositions = arrayMultipleChoice(comptes, propositionsNumber - 1, exclude);
 		comptesPropositions.push(randomCompte.num.toString());
 
 		let propositions = arrayShuffle(comptesPropositions);
