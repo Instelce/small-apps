@@ -53,7 +53,7 @@
 
 	// generate next question
 	function next() {
-		let randomClass = arrayChoice(data.classes);
+		let randomClass = arrayChoice(data.classes) as ClasseType;
 		let randomCompte = arrayChoice(randomClass.comptes);
 
 		let searchField: keyof CompteType = data.gameType == 'codes' ? 'num' : 'nom';
@@ -66,9 +66,9 @@
 		console.log('Exclude :', exclude);
 
 		let comptes = data.classes
-			.map((classe) => classe.comptes)
+			.map((classe: ClasseType) => classe.comptes)
 			.flat(1)
-			.map((c) => c[searchField].toString());
+			.map((c: CompteType) => c[searchField].toString());
 		let comptesPropositions = arrayMultipleChoice(comptes, propositionsNumber - 1, exclude);
 		comptesPropositions.push(randomCompte[searchField].toString());
 
@@ -96,25 +96,27 @@
 			>Retrouve le <strong>{data.gameType === 'codes' ? 'code' : 'nom'}</strong> de ce compte</span
 		>
 		<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">
-			{data.gameType === 'codes' ? 'N°' : ''}
+			{data.gameType === 'codes' ? '' : 'N°'}
 			{$quizData.question}
 		</h3>
 	</div>
 
 	<!-- propositions -->
-	<div class="{data.gameType == 'codes' ? 'grid grid-cols-2' : 'flex flex-col'} gap-2">
+	<div class="{data.gameType === 'codes' ? 'grid grid-cols-2' : 'flex flex-col'} gap-2">
 		{#each $quizData.propositions as num (num)}
 			<AnswerButton
 				answer={num.toString()}
 				goodAnswer={$quizData.questionAnswer.toString()}
 				isAnswered={$isAnswered}
 				onClick={() => {
-					if (num === $quizData.questionAnswer) {
-						score.update((s) => s + 100);
-					} else {
-						errors.update((e) => e + 1);
+					if (!$isAnswered) {
+						if (num === $quizData.questionAnswer) {
+							score.update((s) => s + 100);
+						} else {
+							errors.update((e) => e + 1);
+						}
+						isAnswered.set(true);
 					}
-					isAnswered.set(true);
 				}}
 			/>
 		{/each}

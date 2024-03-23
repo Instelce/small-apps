@@ -22,8 +22,10 @@
 		: ''}
 	on:click={() => {
 		onClick();
-		isClicked.set(true);
+		if (!isAnswered) {
+			isClicked.set(true);
+		}
 	}}
 >
-	<span class="text-lg">N°{answer}</span>
+	<span class="text-lg">{answer.length > 4 ? '' : 'N°'}{answer}</span>
 </Button>
