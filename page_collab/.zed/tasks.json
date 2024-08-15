@@ -1,0 +1,19 @@
+[
+    {
+        "label": "Start development server",
+        "command": "cargo-watch -x check  -s 'cargo loco start'",
+        "use_new_terminal": false,
+        "allow_concurrent_runs": false,
+        "reveal": "always",
+        "hide": "never",
+        "shell": "system"
+    },
+    {
+        "label": "Start up PostgreSQL database & redis server",
+        "command": "docker compose up",
+        "use_new_terminal": false,
+        "allow_concurrent_runs": false,
+        "hide": "never",
+        "shell": "system"
+    }
+]

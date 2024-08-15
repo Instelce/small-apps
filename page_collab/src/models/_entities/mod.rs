@@ -2,4 +2,6 @@
 
 pub mod prelude;
 
+pub mod pages;
+pub mod user_pages;
 pub mod users;

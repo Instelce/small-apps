@@ -1,6 +1,7 @@
 use async_trait::async_trait;
 use chrono::offset::Local;
 use loco_rs::{auth::jwt, hash, prelude::*};
+use sea_orm::QueryTrait;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -123,6 +124,15 @@ impl super::_entities::users::Model {
                     .eq(users::Column::ResetToken, token)
                     .build(),
             )
+            .one(db)
+            .await?;
+        user.ok_or_else(|| ModelError::EntityNotFound)
+    }
+
+    /// finds a user by the provided id
+    pub async fn find_by_id(db: &DatabaseConnection, id: &i32) -> ModelResult<Self> {
+        let user = users::Entity::find()
+            .filter(model::query::condition().eq(users::Column::Id, *id).build())
             .one(db)
             .await?;
         user.ok_or_else(|| ModelError::EntityNotFound)
@@ -279,7 +289,7 @@ impl super::_entities::users::ActiveModel {
     /// updates it in the database.
     ///
     /// This method hashes the provided password and sets it as the new password
-    /// for the user.    
+    /// for the user.
     /// # Errors
     ///
     /// when has DB query error or could not hashed the given password

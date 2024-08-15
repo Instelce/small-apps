@@ -75,6 +75,16 @@ server:
       # Set the value of the [`Access-Control-Max-Age`][mdn] header in seconds
       # max_age: 3600
 
+    # client side app static config
+    static:
+      enable: true
+      must_exist: true
+      precompressed: false
+      folder:
+        uri: "/"
+        path: "frontend/dist"
+      fallback: "frontend/dist/index.html"
+
 # Worker Configuration
 workers:
   # specifies the worker mode. Options:
@@ -142,4 +152,3 @@ auth:
     secret: yPbMDMN7MOPughhyp2u8
     # Token expiration time in seconds
     expiration: 604800 # 7 days
-
