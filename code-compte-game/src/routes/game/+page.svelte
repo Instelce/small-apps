@@ -172,8 +172,8 @@
 	</div>
 
 	<!-- progress bar -->
-	<div class="absolute bottom-10 flex flex-col items-center gap-2 sm:w-[80%] lg:w-[40%]">
-		<p class="text-lg font-medium">{$score}</p>
+	<div class="absolute bottom-10 flex flex-col items-center gap-2 w-[80%] lg:w-[40%]">
+		<p class="text-lg font-medium">{$score} point{$score > 0 ? "s" : ''}</p>
 		<Progress value={$progress} max={maxProgress} class="h-3 w-[100%]" />
 	</div>
 </div>
