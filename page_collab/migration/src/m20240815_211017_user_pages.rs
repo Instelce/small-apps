@@ -13,6 +13,13 @@ impl MigrationTrait for Migration {
                     .col(pk_auto(UserPages::Id))
                     .col(integer(UserPages::UserId))
                     .col(integer(UserPages::PageId))
+                    .index(
+                        Index::create()
+                            .name("idx-user-page")
+                            .unique()
+                            .col(UserPages::UserId)
+                            .col(UserPages::PageId),
+                    )
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk-user_pages-users")
@@ -47,9 +54,7 @@ enum UserPages {
     Id,
     UserId,
     PageId,
-    
 }
-
 
 #[derive(DeriveIden)]
 enum Users {

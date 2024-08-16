@@ -1,0 +1,7 @@
+script:pre-request {
+  const host = "http://localhost:5150";
+  
+  function rand(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+}

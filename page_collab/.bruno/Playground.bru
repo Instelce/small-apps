@@ -1,12 +1,12 @@
 meta {
-  name: Add
+  name: Playground
   type: http
-  seq: 1
+  seq: 2
 }
 
-post {
-  url: {{host}}/api/user_pages
-  body: json
+get {
+  url: {{host}}
+  body: none
   auth: none
 }
 
@@ -18,8 +18,10 @@ script:pre-request {
   let res_user = await axios.get(host + "/api/user/count");
   let user_count = res_user.data;
   
-  req.setBody({
+  req.body = {
     "user_id": rand(1, user_count + 1),
     "page_id": rand(1, page_count + 1)
-  })
+  }
+  
+  console.log(req.body);
 }

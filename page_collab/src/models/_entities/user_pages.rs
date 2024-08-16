@@ -10,7 +10,9 @@ pub struct Model {
     pub updated_at: DateTimeWithTimeZone,
     #[sea_orm(primary_key)]
     pub id: i32,
+    #[sea_orm[unique]]
     pub user_id: i32,
+    #[sea_orm[unique]]
     pub page_id: i32,
 }
 

@@ -5,7 +5,10 @@ use axum::debug_handler;
 use loco_rs::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::models::_entities::user_pages::{ActiveModel, Entity, Model};
+use crate::models::{
+    _entities::user_pages::{ActiveModel, Entity, Model},
+    users::users,
+};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Params {
@@ -35,6 +38,20 @@ pub async fn add(State(ctx): State<AppContext>, Json(params): Json<Params>) -> R
     format::json(item)
 }
 
+pub async fn remove(
+    _auth: auth::ApiToken<users::Model>,
+    Path(id): Path<i32>,
+    State(ctx): State<AppContext>,
+) -> Result<Response> {
+    let item = load_item(&ctx, id).await?;
+    let ritem = item.clone();
+    item.delete(&ctx.db).await?;
+    format::json(ritem)
+}
+
 pub fn routes() -> Routes {
-    Routes::new().prefix("user_pages").add("/", post(add))
+    Routes::new()
+        .prefix("user_pages")
+        .add("/", post(add))
+        .add("/:id", delete(remove))
 }
