@@ -1,25 +1,41 @@
 {
   "name": "frontend",
+  "version": "0.0.1",
   "private": true,
-  "version": "1.0.0",
   "scripts": {
-    "build": "rsbuild build",
-    "check": "biome check --write",
-    "dev": "rsbuild dev --open",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "biome check src/",
     "format": "biome format --write",
-    "preview": "rsbuild preview",
-    "svelte-check": "svelte-check --tsconfig ./tsconfig.json"
-  },
-  "dependencies": {
-    "@rsbuild/plugin-sass": "1.0.1-beta.14",
-    "sass": "^1.77.8",
-    "svelte": "^4.2.18"
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
+    "@sveltejs/adapter-auto": "^3.0.0",
+    "@sveltejs/adapter-static": "^3.0.4",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@tailwindcss/typography": "^0.5.14",
+    "autoprefixer": "^10.4.20",
+    "svelte": "^4.2.7",
+    "svelte-check": "^3.6.0",
+    "sveltekit-superforms": "^2.17.0",
+    "tailwindcss": "^3.4.9",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.3"
+  },
+  "type": "module",
+  "dependencies": {
     "@biomejs/biome": "^1.8.3",
-    "@rsbuild/core": "1.0.1-beta.14",
-    "@rsbuild/plugin-svelte": "1.0.1-beta.14",
-    "svelte-check": "^3.8.5",
-    "typescript": "^5.5.2"
+    "bits-ui": "^0.21.13",
+    "clsx": "^2.1.1",
+    "formsnap": "^1.0.1",
+    "lucide-svelte": "^0.428.0",
+    "sass": "^1.77.8",
+    "tailwind-merge": "^2.5.2",
+    "tailwind-variants": "^0.2.1",
+    "vite-plugin-biome": "^1.0.12",
+    "zod": "^3.23.8"
   }
 }

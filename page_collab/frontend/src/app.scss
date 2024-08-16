@@ -1,0 +1,26 @@
+@import url("https://cdn.jsdelivr.net/gh/jgthms/minireset.css@master/minireset.min.css");
+@import "style/supreme.scss";
+
+:root {
+    --color-gray-1: 40, 44, 51;
+    --color-gray-2: 47, 52, 62;
+    --color-gray-3: 70, 75, 87;
+    --color-light-gray-1: 131, 137, 148;
+    --color-light-gray-2: 178, 185, 198;
+    --color-purple: 180, 119, 207;
+    --color-red: 208, 114, 119;
+    --color-yellow: 222, 193, 132;
+    --color-turquoise: 110, 180, 191;
+}
+
+body {
+    min-height: 100vh;
+    font-size: 16px;
+    font-family: Supreme, sans-serif;
+    color: rgb(var(--color-light-gray-2));
+}
+
+.text-sm {
+    font-size: 1rem;
+    line-height: 1.25rem;
+}
