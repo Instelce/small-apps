@@ -534,6 +534,7 @@ dependencies = [
  "leptos_router",
  "log",
  "rand",
+ "shadcn",
  "styled",
  "stylers",
  "stylist",
@@ -2181,12 +2182,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "shadcn"
+version = "0.1.0"
+dependencies = [
+ "console_error_panic_hook",
+ "console_log",
+ "leptos 0.6.14",
+ "leptos-use",
+ "leptos_lucide",
+ "leptos_meta 0.6.14",
+ "log",
+ "rand",
+ "styled",
+ "stylers",
+ "stylist",
+ "tiny_id",
+]
+
+[[package]]
 name = "shadcn-docs"
 version = "0.1.0"
 dependencies = [
  "leptos 0.6.14",
  "leptos_meta 0.6.14",
  "leptos_router",
+ "shadcn",
 ]
 
 [[package]]

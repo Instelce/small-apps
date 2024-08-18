@@ -1,9 +1,8 @@
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
-
+use shadcn::components::*;
 // Modules
-mod components;
 mod pages;
 
 // Top-Level pages

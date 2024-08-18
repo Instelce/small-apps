@@ -1,4 +1,6 @@
-use crate::components::{
+use leptos::logging::log;
+use leptos::*;
+use shadcn::components::{
     button::{BVariant, Button},
     card::*,
     input::Input,
@@ -6,8 +8,6 @@ use crate::components::{
     select::*,
     tabs::*,
 };
-use leptos::logging::log;
-use leptos::*;
 
 #[derive(Debug, Clone)]
 struct FormsTabValue(String);
@@ -22,30 +22,8 @@ impl TabValue for FormsTabValue {
     }
 }
 
-#[derive(Clone)]
-struct Framework {
-    value: String,
-    label: String,
-}
-
-impl Framework {
-    fn new(value: impl Into<String>, label: impl Into<String>) -> Self {
-        Self {
-            value: value.into(),
-            label: label.into(),
-        }
-    }
-}
-
 #[component]
 pub fn Home() -> impl IntoView {
-    let (data, _) = create_signal(vec![
-        Framework::new("sveltekit", "SvelteKit"),
-        Framework::new("next", "Next.js"),
-        Framework::new("astro", "Astro"),
-        Framework::new("nust", "Nust.js"),
-    ]);
-
     view! {
         <div class="w-full h-[100vh] grid place-items-center">
             <Tabs value=FormsTabValue::set("register") class="w-[400px]">
@@ -84,30 +62,30 @@ pub fn Home() -> impl IntoView {
                     </Card>
                 </TabsContent>
                 <TabsContent value=FormsTabValue::set("login")>
-                <Card class="w-full">
-                <CardHeader>
-                    <CardTitle>"Welcome back"</CardTitle>
-                    <CardDescription>"Happy to see you again !"</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form>
-                        <div class="grid w-full items-center gap-4">
-                            <div class="flex flex-col space-y-1.5">
-                                <Label for_input="email">"Email"</Label>
-                                <Input id="email" />
-                            </div>
-                            <div class="flex flex-col space-y-1.5">
-                                <Label for_input="password">"Password"</Label>
-                                <Input id="password" _type="password" />
-                            </div>
-                        </div>
+                    <Card class="w-full">
+                        <CardHeader>
+                            <CardTitle>"Welcome back"</CardTitle>
+                            <CardDescription>"Happy to see you again !"</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <form>
+                                <div class="grid w-full items-center gap-4">
+                                    <div class="flex flex-col space-y-1.5">
+                                        <Label for_input="email">"Email"</Label>
+                                        <Input id="email" />
+                                    </div>
+                                    <div class="flex flex-col space-y-1.5">
+                                        <Label for_input="password">"Password"</Label>
+                                        <Input id="password" _type="password" />
+                                    </div>
+                                </div>
 
-                        <Button _type="submit" class="w-full mt-4">
-                            "Log in"
-                        </Button>
-                    </form>
-                </CardContent>
-            </Card>
+                                <Button _type="submit" class="w-full mt-4">
+                                    "Log in"
+                                </Button>
+                            </form>
+                        </CardContent>
+                    </Card>
                 </TabsContent>
             </Tabs>
         </div>
