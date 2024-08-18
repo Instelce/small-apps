@@ -2,7 +2,7 @@ use leptos::*;
 
 #[component]
 pub fn Input(
-    #[prop(optional)] itype: &'static str,
+    #[prop(optional)] _type: &'static str,
     #[prop(optional)] id: &'static str,
     #[prop(optional)] name: &'static str,
     #[prop(optional)] maxlength: &'static str,
@@ -12,7 +12,7 @@ pub fn Input(
 ) -> impl IntoView {
     view! {
         <input
-            type=itype
+            type=_type
             id=id
             name=name
             maxlength=maxlength

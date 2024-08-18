@@ -10,7 +10,7 @@ pub enum ButtonVariant {
     Outline,
     Secondary,
     Ghost,
-    Link
+    Link,
 }
 
 pub type BVariant = ButtonVariant;
@@ -21,7 +21,7 @@ pub enum ButtonSize {
     Default,
     Sm,
     Lg,
-    Icon
+    Icon,
 }
 
 pub type BSize = ButtonSize;
@@ -29,7 +29,7 @@ pub type BSize = ButtonSize;
 struct Style {
     base: String,
     variant: HashMap<ButtonVariant, String>,
-    size: HashMap<ButtonSize, String>
+    size: HashMap<ButtonSize, String>,
 }
 
 impl Style {
@@ -56,13 +56,26 @@ impl Style {
     pub fn variants(&self, variant: Option<ButtonVariant>, size: Option<ButtonSize>) -> String {
         let variant_key = variant.unwrap_or_default();
         let size_key = size.unwrap_or_default();
-        format!("{} {} {}", self.base, self.variant[&variant_key], self.size[&size_key])
+        format!(
+            "{} {} {}",
+            self.base, self.variant[&variant_key], self.size[&size_key]
+        )
     }
 }
 
 #[component]
-pub fn Button(#[prop(optional)] variant: Option<ButtonVariant>, #[prop(optional)] size: Option<ButtonSize>, children: Children) -> impl IntoView {
+pub fn Button(
+    #[prop(optional)] variant: Option<ButtonVariant>,
+    #[prop(optional)] size: Option<ButtonSize>,
+    #[prop(optional)] _type: &'static str,
+    #[prop(optional)] class: &'static str,
+    children: Children,
+) -> impl IntoView {
     let style = Style::init();
 
-    view! { <button class=style.variants(variant, size)>{children()}</button> }
+    view! {
+        <button type=_type class=style.variants(variant, size) + " " + class>
+            {children()}
+        </button>
+    }
 }
