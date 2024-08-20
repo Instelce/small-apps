@@ -1,6 +1,9 @@
 #[allow(unused_imports)]
 use loco_rs::{cli::playground, prelude::*};
-use page_collab::{app::App, models::_entities::user_pages};
+use page_collab::{
+    app::App,
+    models::_entities::{user_pages, users},
+};
 
 #[tokio::main]
 async fn main() -> loco_rs::Result<()> {
@@ -16,10 +19,15 @@ async fn main() -> loco_rs::Result<()> {
     // let res = articles::Entity::find().all(&ctx.db).await.unwrap();
     // println!("{:?}", res);
 
-    let user_page_relations = user_pages::Entity::find().all(&ctx.db).await.unwrap();
-    for user in user_page_relations {
-        user.into_active_model().delete(&ctx.db).await.unwrap();
+    let users = users::Entity::find().all(&ctx.db).await?;
+    for user in users {
+        println!("{}", user.name);
     }
+
+    // let user_page_relations = user_pages::Entity::find().all(&ctx.db).await.unwrap();
+    // for user in user_page_relations {
+    //     user.into_active_model().delete(&ctx.db).await.unwrap();
+    // }
 
     Ok(())
 }

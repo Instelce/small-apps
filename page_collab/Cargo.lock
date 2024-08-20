@@ -2492,6 +2492,7 @@ dependencies = [
  "serde_json",
  "serial_test",
  "shared",
+ "thiserror",
  "tokio",
  "tracing",
  "tracing-subscriber",

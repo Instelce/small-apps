@@ -1,7 +1,7 @@
 [
     {
         "label": "development server",
-        "command": "cargo-watch -x check  -s 'cargo loco start'",
+        "command": "cargo-watch --ignore 'frontend' -s 'cargo loco start'",
         "use_new_terminal": false,
         "allow_concurrent_runs": false,
         "reveal": "always",

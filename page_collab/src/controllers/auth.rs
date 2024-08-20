@@ -1,9 +1,10 @@
 use axum::debug_handler;
-use loco_rs::prelude::*;
+use loco_rs::{controller::bad_request, prelude::*};
 use serde::{Deserialize, Serialize};
 use shared::{params::user::LoginParams, response::auth::LoginResponse};
 
 use crate::{
+    errors::ResponseError,
     mailers::auth::AuthMailer,
     models::{_entities::users, users::RegisterParams},
     views::FromModel,
@@ -121,12 +122,22 @@ async fn reset(State(ctx): State<AppContext>, Json(params): Json<ResetParams>) -
 /// Creates a user login and returns a token
 #[debug_handler]
 async fn login(State(ctx): State<AppContext>, Json(params): Json<LoginParams>) -> Result<Response> {
-    let user = users::Model::find_by_email(&ctx.db, &params.email).await?;
+    let user = users::Model::find_by_email(&ctx.db, &params.email).await;
+
+    if let Err(_) = user {
+        return Ok(ResponseError::bad_request(
+            "User with this e-mail adress doesn't exist.",
+        ));
+    }
+
+    let user = user.unwrap();
 
     let valid = user.verify_password(&params.password);
 
     if !valid {
-        return unauthorized("unauthorized!");
+        return Ok(ResponseError::unauthorized(
+            "This combination of e-mail address and password is incorrect.",
+        ));
     }
 
     format::json(LoginResponse::new(&user))
