@@ -17,6 +17,7 @@ shadcn = { path = "./shadcn" }
 leptos = { version = "0.6", features = ["csr", "nightly"] }
 leptos_meta = { version = "0.6", features = ["csr", "nightly"] }
 leptos_router = { version = "0.6", features = ["csr", "nightly"] }
+leptos_reactive = { version = "0.6.14", features = ["csr", "nightly"] }
 leptos_lucide = "0.1.1"
 leptos-use = "0.12.0"
 styled = { version = "0.2.0", features = ["csr"] }
@@ -27,6 +28,16 @@ console_error_panic_hook = "0.1"
 rand = "0.8.5"
 tiny_id = "0.1.6"
 stylers = "0.3.2"
+dotenvy = "0.15.7"
+thiserror = "1.0"
+
+gloo-net = { version = "0.6.0", features = ["http"] }
+leptos_query = { version = "0.5.3", features = ["csr"] }
+reqwest = { version = "0.12.5", features = ["json"] }
+serde = { version = "1.0.208", features = ["derive"] }
+
+shared = { path = "../shared" }
+dotenvy_macro = "0.15.7"
 
 # utils
 # strum = { version = "0.25", features = ["derive", "strum_macros"] }

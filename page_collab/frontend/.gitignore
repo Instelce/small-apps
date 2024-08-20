@@ -1,3 +1,4 @@
 /target
 /dist
 /shadcn-svelte
+.env

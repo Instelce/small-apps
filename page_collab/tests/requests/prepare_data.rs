@@ -1,6 +1,7 @@
 use axum::http::{HeaderName, HeaderValue};
 use loco_rs::{app::AppContext, TestServer};
-use page_collab::{models::users, views::auth::LoginResponse};
+use page_collab::models::users;
+use shared::response::auth::LoginResponse;
 
 const USER_EMAIL: &str = "test@loco.com";
 const USER_PASSWORD: &str = "1234";

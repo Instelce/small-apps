@@ -1,23 +1,17 @@
-use serde::{Deserialize, Serialize};
+use shared::response::auth::LoginResponse;
 
 use crate::models::_entities::users;
 
-#[derive(Debug, Deserialize, Serialize)]
-pub struct LoginResponse {
-    pub token: String,
-    pub pid: String,
-    pub name: String,
-    pub is_verified: bool,
-}
+use super::FromModel;
 
-impl LoginResponse {
+impl FromModel<users::Model> for LoginResponse {
     #[must_use]
-    pub fn new(user: &users::Model) -> Self {
+    fn new(model: &users::Model) -> Self {
         Self {
-            token: user.api_key.to_string(),
-            pid: user.pid.to_string(),
-            name: user.name.clone(),
-            is_verified: user.email_verified_at.is_some(),
+            token: model.api_key.to_string(),
+            pid: model.pid.to_string(),
+            name: model.name.clone(),
+            is_verified: model.email_verified_at.is_some(),
         }
     }
 }

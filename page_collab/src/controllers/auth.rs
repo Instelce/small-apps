@@ -1,15 +1,14 @@
 use axum::debug_handler;
 use loco_rs::prelude::*;
 use serde::{Deserialize, Serialize};
+use shared::{params::user::LoginParams, response::auth::LoginResponse};
 
 use crate::{
     mailers::auth::AuthMailer,
-    models::{
-        _entities::users,
-        users::{LoginParams, RegisterParams},
-    },
-    views::auth::LoginResponse,
+    models::{_entities::users, users::RegisterParams},
+    views::FromModel,
 };
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct VerifyParams {
     pub token: String,

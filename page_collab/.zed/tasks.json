@@ -1,6 +1,6 @@
 [
     {
-        "label": "Start development server",
+        "label": "development server",
         "command": "cargo-watch -x check  -s 'cargo loco start'",
         "use_new_terminal": false,
         "allow_concurrent_runs": false,
@@ -9,7 +9,17 @@
         "shell": "system"
     },
     {
-        "label": "Start up PostgreSQL database & redis server",
+        "label": "front development server",
+        "command": "trunk serve --port 3000",
+        "cwd": "$ZED_WORKTREE_ROOT/frontend",
+        "use_new_terminal": false,
+        "allow_concurrent_runs": false,
+        "reveal": "always",
+        "hide": "never",
+        "shell": "system"
+    },
+    {
+        "label": "postgresql database & redis server",
         "command": "docker compose up",
         "use_new_terminal": false,
         "allow_concurrent_runs": false,
