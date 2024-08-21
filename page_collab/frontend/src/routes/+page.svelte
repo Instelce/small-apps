@@ -6,18 +6,18 @@
 	import FormJoin from './form-join.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	export let data: PageData;
 
-	console.log($page.url.searchParams);
-
 	$: fromJoin = $page.url.searchParams.get('from') === 'join';
-	$: console.log(fromJoin);
 
-	$: if (!fromJoin) {
-		let query = new URLSearchParams();
-		query.set('from', '');
-		goto(`?${query.toString()}`);
+	if (browser) {
+		if (!fromJoin) {
+			let query = new URLSearchParams($page.url.searchParams);
+			query.delete('from');
+			goto(`/?${query.toString()}`);
+		}
 	}
 </script>
 

@@ -12,6 +12,7 @@ const base = async (uri: string, options?: RequestInit) => {
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: "include",
         ...options
     };
 
@@ -19,7 +20,7 @@ const base = async (uri: string, options?: RequestInit) => {
 }
 
 
-export const get = async (uri: string, auth?: boolean, options?: RequestInit) => {
+export const get = async<R>(uri: string, auth?: boolean, options?: RequestInit) => {
     let _options: RequestInit = {
         ...options
     };
@@ -33,7 +34,18 @@ export const get = async (uri: string, auth?: boolean, options?: RequestInit) =>
         };
     }
 
-    return await base(uri, _options);
+
+    let response = await base(uri, _options);
+
+    let data: R | null = null;
+    let errors: ResponseError | null = null;
+    if (response.status !== 200) {
+        errors = await response.json();
+    } else {
+        data = await response.json();
+    }
+
+    return { response, data, errors };
 }
 
 
@@ -54,6 +66,7 @@ export const post = async<P, R>(uri: string, body: P, auth?: boolean, options?: 
     }
 
     let response = await base(uri, _options);
+
     let data: R | null = null;
     let errors: ResponseError | null = null;
     if (response.status !== 200) {
@@ -61,5 +74,6 @@ export const post = async<P, R>(uri: string, body: P, auth?: boolean, options?: 
     } else {
         data = await response.json();
     }
+
     return { response, data, errors };
 }

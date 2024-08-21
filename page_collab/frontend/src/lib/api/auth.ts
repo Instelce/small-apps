@@ -29,7 +29,7 @@ export type JoinParams = z.infer<typeof joinSchema>;
 export type LoginResponse = {
     token: string;
     pid: string;
-    email: string;
+    name: string;
     isVerified: boolean;
 };
 
@@ -42,6 +42,7 @@ export const login = async (params: LoginParams) => {
     if (data) {
         authStore.update(store => {
             store.token = data.token;
+            store.user = data.name;
             return store;
         });
     }
@@ -52,4 +53,21 @@ export const login = async (params: LoginParams) => {
 export const join = async (params: JoinParams) => {
     let { data, errors } = await post<JoinParams, JoinResponse>("/auth/register", params);
     return { data, errors }
+}
+
+export const alreadyLoggedIn = async () => {
+    let { response, data } = await get<LoginResponse>("/auth/already-login");
+
+    if (data) {
+        console.log("yes", data.token);
+        authStore.update(store => {
+            store.token = data.token;
+            store.user = data.name;
+            return store;
+        });
+
+        return true;
+    }
+
+    return false;
 }

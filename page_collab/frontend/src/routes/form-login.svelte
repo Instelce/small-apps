@@ -10,26 +10,16 @@
 	export let data: SuperValidated<Infer<LoginSchema>>;
 
 	let form = superForm(data, {
-		SPA: true,
 		validators: zodClient(loginSchema),
 		dataType: 'json',
 		resetForm: false,
-		timeoutMs: 1000,
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				let response = await login(form.data);
-
-				if (response.errors) {
-					form.message = response.errors.description;
-				}
-			}
-		}
+		timeoutMs: 1000
 	});
 
 	let { form: formData, enhance, message, delayed } = form;
 </script>
 
-<form method="post" use:enhance class="space-y-2">
+<form method="post" action="?/login" use:enhance class="space-y-2">
 	{#if $message}
 		<div>
 			<div class="mb-2 text-center text-sm font-medium text-destructive">{$message}</div>

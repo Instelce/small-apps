@@ -6,6 +6,6 @@
 	export let data: LayoutData;
 </script>
 
-<Toaster richColors />
+<Toaster richColors position="bottom-center" />
 
 <slot></slot>

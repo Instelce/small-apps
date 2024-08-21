@@ -58,6 +58,9 @@ devDependencies:
   '@types/eslint':
     specifier: ^9.6.0
     version: 9.6.0
+  '@types/node':
+    specifier: ^22.4.1
+    version: 22.4.1
   autoprefixer:
     specifier: ^10.4.20
     version: 10.4.20(postcss@8.4.41)
@@ -99,7 +102,7 @@ devDependencies:
     version: 8.2.0(eslint@9.9.0)(typescript@5.5.4)
   vite:
     specifier: ^5.0.3
-    version: 5.4.1(sass@1.77.8)
+    version: 5.4.1(@types/node@22.4.1)(sass@1.77.8)
 
 packages:
 
@@ -709,7 +712,7 @@ packages:
       sirv: 2.0.4
       svelte: 4.2.18
       tiny-glob: 0.2.9
-      vite: 5.4.1(sass@1.77.8)
+      vite: 5.4.1(@types/node@22.4.1)(sass@1.77.8)
 
   /@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.18)(vite@5.4.1):
     resolution: {integrity: sha512-9QX28IymvBlSCqsCll5t0kQVxipsfhFFL+L2t3nTWfXnddYwxBuAEtTtlaVQpRz9c37BhJjltSeY4AJSC03SSg==}
@@ -722,7 +725,7 @@ packages:
       '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@4.2.18)(vite@5.4.1)
       debug: 4.3.6
       svelte: 4.2.18
-      vite: 5.4.1(sass@1.77.8)
+      vite: 5.4.1(@types/node@22.4.1)(sass@1.77.8)
     transitivePeerDependencies:
       - supports-color
 
@@ -740,7 +743,7 @@ packages:
       magic-string: 0.30.11
       svelte: 4.2.18
       svelte-hmr: 0.16.0(svelte@4.2.18)
-      vite: 5.4.1(sass@1.77.8)
+      vite: 5.4.1(@types/node@22.4.1)(sass@1.77.8)
       vitefu: 0.2.5(vite@5.4.1)
     transitivePeerDependencies:
       - supports-color
@@ -778,6 +781,11 @@ packages:
 
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  /@types/node@22.4.1:
+    resolution: {integrity: sha512-1tbpb9325+gPnKK0dMm+/LMriX0vKxf6RnB0SZUqfyVkQ4fMgUSySqhxE/y8Jvs4NyF1yHzTfG9KlnkIODxPKg==}
+    dependencies:
+      undici-types: 6.19.8
 
   /@types/pug@2.0.10:
     resolution: {integrity: sha512-Sk/uYFOBAB7mb74XcpizmH0KOR2Pv3D2Hmrh1Dmy5BmK3MpdSa5kqZcg6EKBdklU0bFXX9gCfzvpnyUehrPIuA==}
@@ -2830,6 +2838,9 @@ packages:
     hasBin: true
     dev: true
 
+  /undici-types@6.19.8:
+    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+
   /update-browserslist-db@1.1.0(browserslist@4.23.3):
     resolution: {integrity: sha512-EdRAaAyk2cUE1wOf2DkEhzxqOQvFOoRJFNS6NeyJ01Gp2beMRpBAINjM2iDXE3KCuKhwnvHIQCJm6ThL2Z+HzQ==}
     hasBin: true
@@ -2869,7 +2880,7 @@ packages:
     dev: false
     optional: true
 
-  /vite@5.4.1(sass@1.77.8):
+  /vite@5.4.1(@types/node@22.4.1)(sass@1.77.8):
     resolution: {integrity: sha512-1oE6yuNXssjrZdblI9AfBbHCC41nnyoVoEZxQnID6yvQZAFBzxxkqoFLtHUMkYunL8hwOLEjgTuxpkRxvba3kA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -2900,6 +2911,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 22.4.1
       esbuild: 0.21.5
       postcss: 8.4.41
       rollup: 4.21.0
@@ -2915,7 +2927,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.4.1(sass@1.77.8)
+      vite: 5.4.1(@types/node@22.4.1)(sass@1.77.8)
 
   /which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
