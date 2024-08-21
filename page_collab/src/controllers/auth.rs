@@ -1,7 +1,9 @@
 use axum::debug_handler;
+use cookie::{Cookie, SameSite};
 use loco_rs::{controller::bad_request, prelude::*};
 use serde::{Deserialize, Serialize};
 use shared::{params::user::LoginParams, response::auth::LoginResponse};
+use tower_cookies::{cookie::CookieBuilder, Cookies};
 
 use crate::{
     errors::ResponseError,
@@ -121,7 +123,11 @@ async fn reset(State(ctx): State<AppContext>, Json(params): Json<ResetParams>) -
 
 /// Creates a user login and returns a token
 #[debug_handler]
-async fn login(State(ctx): State<AppContext>, Json(params): Json<LoginParams>) -> Result<Response> {
+async fn login(
+    // cookies: Cookies,
+    State(ctx): State<AppContext>,
+    Json(params): Json<LoginParams>,
+) -> Result<Response> {
     let user = users::Model::find_by_email(&ctx.db, &params.email).await;
 
     if let Err(_) = user {
@@ -140,7 +146,30 @@ async fn login(State(ctx): State<AppContext>, Json(params): Json<LoginParams>) -
         ));
     }
 
-    format::json(LoginResponse::new(&user))
+    // let mut cookie = Cookie::new("token", user.api_key.clone());
+    // cookie.set_http_only(true);
+    // // cookie.set_path("/");
+    // cookie.set_same_site(Some(cookie::SameSite::None));
+    // cookie.set_secure(Some(true));
+    // cookies.add(cookie);
+
+    format::render()
+        .cookies(&[CookieBuilder::new("token", user.api_key.clone())
+            .same_site(SameSite::None)
+            .secure(true)
+            .path("/")
+            .http_only(true)
+            .build()])?
+        .json(LoginResponse::new(&user))
+}
+
+async fn already_login(cookies: Cookies, State(ctx): State<AppContext>) -> Result<Response> {
+    if let Some(token) = cookies.get("token") {
+        let user = users::Model::find_by_api_key(&ctx.db, token.value()).await?;
+        return format::json(LoginResponse::new(&user));
+    }
+
+    format::json(())
 }
 
 pub fn routes() -> Routes {
@@ -149,6 +178,7 @@ pub fn routes() -> Routes {
         .add("/register", post(register))
         .add("/verify", post(verify))
         .add("/login", post(login))
+        .add("/already-login", get(already_login))
         .add("/forgot", post(forgot))
         .add("/reset", post(reset))
 }

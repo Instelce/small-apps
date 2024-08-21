@@ -2,8 +2,8 @@ use axum::debug_handler;
 use loco_rs::prelude::*;
 
 use crate::{
-    models::_entities::{user_pages, users},
-    views::user::CurrentResponse,
+    models::_entities::{pages, user_pages, users},
+    views::{page::DetailPageResponse, user::CurrentResponse},
 };
 
 async fn load_user(ctx: &AppContext, id: &i32) -> Result<users::Model> {
@@ -32,7 +32,26 @@ async fn pages(
     State(ctx): State<AppContext>,
 ) -> Result<Response> {
     let item = load_user(&ctx, &auth.user.id).await?;
-    let pages = item.find_related(user_pages::Entity).all(&ctx.db).await?;
+    let page_relations = item.find_related(user_pages::Entity).all(&ctx.db).await?;
+
+    let mut pages = Vec::new();
+    for relation in page_relations {
+        let page = pages::Entity::find()
+            .filter(pages::Column::Id.eq(relation.page_id))
+            .one(&ctx.db)
+            .await?
+            .unwrap();
+
+        let user_relations = page.find_related(user_pages::Entity).all(&ctx.db).await?;
+        let mut collaborators = Vec::new();
+        for relation in user_relations {
+            let user = load_user(&ctx, &relation.user_id).await?;
+            collaborators.push(user);
+        }
+
+        pages.push(DetailPageResponse::new(&page, collaborators));
+    }
+
     format::json(pages)
 }
 

@@ -7,14 +7,20 @@ export type ResponseError = {
     description: string,
 }
 
+export type ListResponse<T> = T[];
+
 const base = async (uri: string, options?: RequestInit) => {
     let _options: RequestInit = {
-        headers: {
-            "Content-Type": "application/json"
-        },
         credentials: "include",
         ...options
     };
+
+    _options.headers = {
+        "Content-Type": "application/json",
+        ...options?.headers
+    }
+
+    console.log("options", _options, options);
 
     return await fetch(PUBLIC_API_HOST + uri, _options);
 }
@@ -61,7 +67,6 @@ export const post = async<P, R>(uri: string, body: P, auth?: boolean, options?: 
 
         _options.headers = {
             "Authorization": "Bearer " + token,
-            ..._options.headers
         };
     }
 

@@ -7,12 +7,14 @@ use loco_rs::{
     controller::AppRoutes,
     db::{self, truncate_table},
     environment::Environment,
+    storage::{self, Storage},
     task::Tasks,
     worker::{AppWorker, Processor},
     Result,
 };
 use migration::Migrator;
 use sea_orm::DatabaseConnection;
+use tower_cookies::CookieManagerLayer;
 
 use crate::{controllers, models::_entities::users, tasks, workers::downloader::DownloadWorker};
 
@@ -40,7 +42,7 @@ impl Hooks for App {
     fn routes(_ctx: &AppContext) -> AppRoutes {
         AppRoutes::with_default_routes()
             .prefix("/api")
-            .add_route(controllers::auth::routes())
+            .add_route(controllers::auth::routes().layer(CookieManagerLayer::new()))
             .add_route(controllers::user::routes())
             .add_route(controllers::page::routes())
             .add_route(controllers::user_page::routes())
@@ -63,5 +65,12 @@ impl Hooks for App {
     async fn seed(db: &DatabaseConnection, base: &Path) -> Result<()> {
         db::seed::<users::ActiveModel>(db, &base.join("users.yaml").display().to_string()).await?;
         Ok(())
+    }
+
+    async fn after_context(ctx: AppContext) -> Result<AppContext> {
+        Ok(AppContext {
+            storage: Storage::single(storage::drivers::local::new_with_prefix("storage")?).into(),
+            ..ctx
+        })
     }
 }

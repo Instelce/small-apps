@@ -15,5 +15,7 @@ export const load = (async ({ url }) => {
         redirect(307, "/pages");
     }
 
-    return {};
+    return {
+        auth: get(authStore)
+    };
 }) satisfies LayoutServerLoad;

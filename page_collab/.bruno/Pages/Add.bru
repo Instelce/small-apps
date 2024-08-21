@@ -10,6 +10,10 @@ post {
   auth: none
 }
 
+headers {
+  Authorization: Bearer {{token}}
+}
+
 script:pre-request {
   const { faker } = require('@faker-js/faker');
   const name = faker.word.words(2);

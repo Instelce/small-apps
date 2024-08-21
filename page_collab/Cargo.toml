@@ -30,13 +30,14 @@ sea-orm = { version = "1.0.0", features = [
     "macros",
 ] }
 
-axum = "0.7.5"
+axum = { version = "0.7.5", features = ["multipart"] }
 include_dir = "0.7"
 uuid = { version = "1.6.0", features = ["v4"] }
 tracing-subscriber = { version = "0.3.17", features = ["env-filter", "json"] }
 thiserror = "1.0.0"
 
 shared = { path = "./shared" }
+tower-cookies = "0.10.0"
 
 [[bin]]
 name = "page_collab-cli"

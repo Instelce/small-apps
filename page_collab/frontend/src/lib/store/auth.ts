@@ -11,3 +11,7 @@ export const isAuthentificated = (): boolean => {
 
     return true;
 }
+
+export const getToken = (): string => {
+    return get(authStore).token;
+}

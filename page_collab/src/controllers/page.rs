@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     models::_entities::{
-        pages::{ActiveModel, Entity, Model},
+        pages::{self, ActiveModel, Entity, Model},
         user_pages, users,
     },
     views::user::UsersResponse,
@@ -38,17 +38,49 @@ pub async fn count(State(ctx): State<AppContext>) -> Result<Response> {
 }
 
 #[debug_handler]
-pub async fn list(State(ctx): State<AppContext>) -> Result<Response> {
+pub async fn list(
+    auth: auth::ApiToken<users::Model>,
+    State(ctx): State<AppContext>,
+) -> Result<Response> {
+    let user_pages = user_pages::Entity::find()
+        .filter(user_pages::Column::UserId.eq(auth.user.id))
+        .all(&ctx.db)
+        .await?;
+
+    let mut items = Vec::new();
+    for rel in user_pages {
+        items.push(
+            Entity::find()
+                .filter(pages::Column::Id.eq(rel.page_id))
+                .one(&ctx.db)
+                .await?,
+        );
+    }
+
     format::json(Entity::find().all(&ctx.db).await?)
 }
 
 #[debug_handler]
-pub async fn add(State(ctx): State<AppContext>, Json(params): Json<Params>) -> Result<Response> {
+pub async fn add(
+    auth: auth::ApiToken<users::Model>,
+    State(ctx): State<AppContext>,
+    Json(params): Json<Params>,
+) -> Result<Response> {
+    // create page
     let mut item = ActiveModel {
         ..Default::default()
     };
     params.update(&mut item);
     let item = item.insert(&ctx.db).await?;
+
+    // create relation
+    let relation = user_pages::ActiveModel {
+        user_id: Set(auth.user.id),
+        page_id: Set(item.id),
+        ..Default::default()
+    };
+    relation.insert(&ctx.db).await?;
+
     format::json(item)
 }
 

@@ -40,6 +40,22 @@ impl UserResponse {
     }
 }
 
+/// Single user with avatar
+#[derive(Debug, Deserialize, Serialize)]
+pub struct UserAvatarResponse {
+    pub name: String,
+    pub avatar: Option<String>,
+}
+
+impl UserAvatarResponse {
+    pub fn new(user: &users::Model) -> Self {
+        Self {
+            name: user.name.clone(),
+            avatar: user.avatar.clone(),
+        }
+    }
+}
+
 /// List of users
 #[derive(Debug, Deserialize, Serialize)]
 pub struct UsersResponse(Vec<UserResponse>);

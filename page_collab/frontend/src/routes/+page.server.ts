@@ -18,7 +18,8 @@ export const actions: Actions = {
         if (form.valid) {
             let data = form.data;
             let response = await login(data);
-            console.log(response.data);
+
+            // set token cookie
             if (response.data) {
                 let token = response.data.token;
                 event.cookies.set("token", token, { path: '/' });
