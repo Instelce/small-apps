@@ -5,7 +5,7 @@ import type { UserAvatar } from "./user"
 
 // Schemas
 export const newPageSchema = z.object({
-    name: z.string().min(2).max(50),
+    name: z.string(),
 });
 
 export type NewPageSchema = typeof newPageSchema;
@@ -36,5 +36,8 @@ export const pages = {
     },
     new: async (params: NewPageParams) => {
         return await post<NewPageParams, Page>("/pages", params, true);
+    },
+    get: async (id: number) => {
+        return await get<DetailPage>(`/pages/${id}`, true);
     }
 }

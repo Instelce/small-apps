@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { get, post } from ".";
 import { authStore } from "$lib/store/auth";
+import type { User } from "./user";
 
 
 // Validation Schemas
@@ -55,19 +56,27 @@ export const join = async (params: JoinParams) => {
     return { data, errors }
 }
 
-export const alreadyLoggedIn = async () => {
-    let { response, data } = await get<LoginResponse>("/auth/already-login");
+export const alreadyLoggedIn = async (token: string) => {
+    authStore.update(store => {
+        store.token = token;
+        return store;
+    });
 
-    if (data) {
-        console.log("yes", data.token);
+    let { response, data } = await get<User>("/auth/user/current");
+
+    if (response.status === 200) {
         authStore.update(store => {
-            store.token = data.token;
-            store.user = data.name;
+            store.user = data?.name as string;
+            return store;
+        });
+    } else {
+        authStore.update(store => {
+            store.token = "";
             return store;
         });
 
-        return true;
+        return false;
     }
 
-    return false;
+    return true;
 }

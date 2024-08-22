@@ -6,7 +6,7 @@ use crate::{
     views::{page::DetailPageResponse, user::CurrentResponse},
 };
 
-async fn load_user(ctx: &AppContext, id: &i32) -> Result<users::Model> {
+pub async fn load_user(ctx: &AppContext, id: &i32) -> Result<users::Model> {
     users::Model::find_by_id(&ctx.db, id)
         .await
         .or_else(|_| Err(Error::NotFound))

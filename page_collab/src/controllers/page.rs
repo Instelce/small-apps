@@ -3,15 +3,19 @@
 #![allow(clippy::unused_async)]
 use axum::debug_handler;
 use loco_rs::prelude::*;
-use sea_orm::{PaginatorTrait, QuerySelect, QueryTrait};
 use serde::{Deserialize, Serialize};
 
 use crate::{
+    controllers::user as user_controller,
+    errors::ResponseError,
     models::_entities::{
         pages::{self, ActiveModel, Entity, Model},
         user_pages, users,
     },
-    views::user::UsersResponse,
+    views::{
+        page::DetailPageResponse,
+        user::{UserResponse, UsersResponse},
+    },
 };
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -125,8 +129,16 @@ pub async fn get_one(
         .await?;
 
     match relation {
-        Some(_) => format::json(load_item(&ctx, id).await?),
-        None => Err(Error::Unauthorized("User cannot access this page".into())),
+        Some(_) => {
+            let user_relation = item.find_related(user_pages::Entity).all(&ctx.db).await?;
+            let mut users = Vec::new();
+            for relation in user_relation {
+                users.push(user_controller::load_user(&ctx, &relation.user_id).await?);
+            }
+
+            format::json(DetailPageResponse::new(&item, users))
+        }
+        None => Ok(ResponseError::unauthorized("User cannot access this page")),
     }
 }
 

@@ -10,10 +10,12 @@ post {
   auth: none
 }
 
-body:json {
-  {
-    "name": "Bruno",
-    "email": "bruno@dog.org",
-    "password": "12341234"
-  }
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  req.setBody({
+    name: faker.person.firstName(),
+    email: faker.internet.email(),
+    password: "12341234"
+  });
 }

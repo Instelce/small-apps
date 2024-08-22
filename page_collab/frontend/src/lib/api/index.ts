@@ -9,7 +9,7 @@ export type ResponseError = {
 
 export type ListResponse<T> = T[];
 
-const base = async (uri: string, options?: RequestInit) => {
+const base = async (uri: string, auth?: boolean, options?: RequestInit) => {
     let _options: RequestInit = {
         credentials: "include",
         ...options
@@ -20,7 +20,14 @@ const base = async (uri: string, options?: RequestInit) => {
         ...options?.headers
     }
 
-    console.log("options", _options, options);
+    if (auth) {
+        let token = getStore(authStore).token;
+
+        _options.headers = {
+            "Authorization": "Bearer " + token,
+            ..._options.headers
+        };
+    }
 
     return await fetch(PUBLIC_API_HOST + uri, _options);
 }
@@ -31,17 +38,7 @@ export const get = async<R>(uri: string, auth?: boolean, options?: RequestInit) 
         ...options
     };
 
-    if (auth) {
-        let token = getStore(authStore).token;
-
-        _options.headers = {
-            "Authorization": "Bearer " + token,
-            ..._options.headers
-        };
-    }
-
-
-    let response = await base(uri, _options);
+    let response = await base(uri, auth, _options);
 
     let data: R | null = null;
     let errors: ResponseError | null = null;
@@ -62,15 +59,7 @@ export const post = async<P, R>(uri: string, body: P, auth?: boolean, options?: 
         ...options
     };
 
-    if (auth) {
-        let token = getStore(authStore).token;
-
-        _options.headers = {
-            "Authorization": "Bearer " + token,
-        };
-    }
-
-    let response = await base(uri, _options);
+    let response = await base(uri, auth, _options);
 
     let data: R | null = null;
     let errors: ResponseError | null = null;

@@ -10,7 +10,7 @@ const config: Config = {
 			center: true,
 			padding: "2rem",
 			screens: {
-				"2xl": "1400px"
+				"2xl": "900px"
 			}
 		},
 		extend: {
@@ -52,10 +52,16 @@ const config: Config = {
 			borderRadius: {
 				lg: "var(--radius)",
 				md: "calc(var(--radius) - 2px)",
-				sm: "calc(var(--radius) - 4px)"
+				sm: "calc(var(--radius) - 4px)",
+			},
+			borderWidth: {
+				"1": "1px",
 			},
 			fontFamily: {
 				sans: [...fontFamily.sans]
+			},
+			boxShadow: {
+				"outline": "0 0 0 2px hsl(var(--card))",
 			}
 		}
 	},

@@ -23,7 +23,7 @@
 
 <div class="grid h-[100vh] w-full place-items-center">
 	<Tabs.Root value={fromJoin ? 'login' : 'join'} class="w-[400px]">
-		<Tabs.List class="grid w-full grid-cols-2">
+		<Tabs.List class="grid h-auto w-full grid-cols-2 border p-1">
 			<Tabs.Trigger value="join">Join</Tabs.Trigger>
 			<Tabs.Trigger value="login">Login</Tabs.Trigger>
 		</Tabs.List>
